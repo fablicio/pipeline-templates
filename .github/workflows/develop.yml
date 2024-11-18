@@ -1,5 +1,4 @@
 name: MyApp develop
-on:
 env:
   REGISTRY: "k8s-01"
   IMAGE_NAME: "mynginx:local"
