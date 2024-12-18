@@ -3,13 +3,13 @@ name: Reusable Pipeline
 on:
   workflow_call:
     inputs:
-      project:
+      docker_username:
         required: true
         type: string
-      dockerfile:
+      docker_password:
         required: true
         type: string
-      environment:
+      image_name:
         required: true
         type: string
     secrets:
@@ -17,24 +17,25 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        run: |
+          docker buildx create --use
+          docker buildx inspect --bootstrap
 
       - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        run: echo "${{ inputs.docker_password }}" | docker login -u "${{ inputs.docker_username }}" --password-stdin
 
-      - name: Build and push Docker image
+      - name: Build Docker image locally
         run: |
-          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ inputs.project }}:${{ github.sha }} -f ${{ inputs.dockerfile }} .
-          docker push ${{ inputs.project }}:${{ github.sha }}
+          docker build -t ${{ inputs.image_name }}:latest -f Dockerfile .
 
-      - name: Deploy to environment
+      - name: Tag and push Docker image
         run: |
-          echo "Deploying to ${{ inputs.environment }} environment"
-          # Adicione seus comandos de implantação aqui
+          docker tag ${{ inputs.image_name }}:latest ${{ inputs.image_name }}:${{ github.sha }}
+          docker push ${{ inputs.image_name }}:${{ github.sha }}
