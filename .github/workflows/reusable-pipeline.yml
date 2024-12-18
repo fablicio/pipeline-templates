@@ -12,8 +12,6 @@ on:
       image_name:
         required: true
         type: string
-    secrets:
-      inherit: true
 
 jobs:
   build:
