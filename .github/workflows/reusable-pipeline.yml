@@ -37,3 +37,7 @@ jobs:
         run: |
           docker tag ${{ inputs.image_name }}:webapp ${{ inputs.image_name }}:${{ github.sha }}
           docker push ${{ inputs.image_name }}:${{ github.sha }}
+
+      - name: Run Docker container
+        run: |
+          docker run -d -p 80:80 --name webapp_container ${{ inputs.image_name }}:${{ github.sha }}
