@@ -31,7 +31,7 @@ jobs:
 
       - name: Build Docker image locally
         run: |
-          docker build -t ${{ inputs.image_name }}:latest -f Dockerfile .
+          docker build -t ${{ inputs.image_name }}:webapp -f Dockerfile .
 
       - name: Tag and push Docker image
         run: |
