@@ -35,5 +35,5 @@ jobs:
 
       - name: Tag and push Docker image
         run: |
-          docker tag ${{ inputs.image_name }}:latest ${{ inputs.image_name }}:${{ github.sha }}
+          docker tag ${{ inputs.image_name }}:webapp ${{ inputs.image_name }}:${{ github.sha }}
           docker push ${{ inputs.image_name }}:${{ github.sha }}
