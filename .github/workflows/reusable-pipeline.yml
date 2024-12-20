@@ -11,10 +11,6 @@ jobs:
   build:
     runs-on: self-hosted
 
-env:
-      DOCKER_USERNAME: ${{ var.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ var.DOCKER_PASSWORD }}
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
